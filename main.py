@@ -20,11 +20,7 @@ def main():
     if args.mode == "train":
 
         # Training mode
-        Target = "product02"
-        X = data.drop(columns=[Target])
-        y = data[Target]
-
-        train_model(X, y)
+        train_model(data)
         print("Model training completed!")
     ################################ Prediction mode ################################
     elif args.mode == "predict":

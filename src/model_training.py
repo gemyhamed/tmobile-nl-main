@@ -4,19 +4,32 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
 from src.data_preprocessing import build_preprocessor, FeatureEngineering
+import os
+
+
+# Custom function to drop rows with more than 2 missing values (used only during training)
+def drop_rows_with_missing_values(df, threshold=2):
+    print(f"Dropping rows with more than {threshold} missing values...")
+    return df.dropna(thresh=df.shape[1] - threshold)
 
 
 # Train the model and save the pipeline as a .pkl file
-def train_model(X, y):
+def train_model(data):
+
+    Target = "product02"
+    data = drop_rows_with_missing_values(data, threshold=2)
+    X = data.drop(columns=[Target])
+    y = data[Target]
+
     print("Splitting the data into training and test sets...")
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=65
+        X, y, test_size=0.2, random_state=42
     )
 
     print(
         "Building the full pipeline (feature engineering, preprocessing, and classifier)..."
     )
-    # Build the full pipeline
+    # Build the full pipeline (feature engineering + preprocessing + classifier)
     preprocessor = build_preprocessor()
 
     full_pipeline = Pipeline(
@@ -25,16 +38,16 @@ def train_model(X, y):
             ("preprocessor", preprocessor),  # Preprocessing step
             (
                 "classifier",
-                RandomForestClassifier(random_state=12, class_weight="balanced"),
-            ),
+                RandomForestClassifier(random_state=42, class_weight="balanced"),
+            ),  # Classifier
         ]
     )
 
     # Reduce the hyperparameter grid for faster search
     param_grid = {
-        "classifier__n_estimators": [50, 100],
-        "classifier__max_depth": [10, 15],
-        "classifier__min_samples_split": [2, 5],
+        "classifier__n_estimators": [50, 100],  # Fewer trees for faster search
+        "classifier__max_depth": [10, 15],  # Reduce depth to make trees smaller
+        "classifier__min_samples_split": [2, 5],  # Keep it small for fast searches
     }
 
     print("Starting hyperparameter tuning with GridSearchCV...")
@@ -42,7 +55,7 @@ def train_model(X, y):
     grid_search = GridSearchCV(
         estimator=full_pipeline,
         param_grid=param_grid,
-        cv=5,
+        cv=3,
         scoring="f1_weighted",
         n_jobs=-1,
     )
@@ -56,14 +69,22 @@ def train_model(X, y):
 
     print(f"Best hyperparameters found: {best_params}")
 
+    # Evaluate on test set
+    accuracy = best_pipeline.score(X_test, y_test)
+    print(f"Model accuracy on test set: {accuracy:.4f}")
+
     # Generate classification report
     y_pred = best_pipeline.predict(X_test)
     print("Classification Report (Test Set):")
     print(classification_report(y_test, y_pred))
 
     # Save the entire pipeline (feature engineering, preprocessing, and model) as .pkl
+    model_dir = "models"
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+
     print("Saving the trained pipeline to 'models/train_pipeline.pkl'...")
-    joblib.dump(best_pipeline, "models/train_pipeline.pkl")
+    joblib.dump(best_pipeline, os.path.join(model_dir, "train_pipeline.pkl"))
     print("Training pipeline saved successfully.")
 
     return best_pipeline
