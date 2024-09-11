@@ -10,7 +10,7 @@ from src.data_preprocessing import build_preprocessor, FeatureEngineering
 def train_model(X, y):
     print("Splitting the data into training and test sets...")
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=12
+        X, y, test_size=0.2, random_state=65
     )
 
     print(
@@ -42,7 +42,7 @@ def train_model(X, y):
     grid_search = GridSearchCV(
         estimator=full_pipeline,
         param_grid=param_grid,
-        cv=3,
+        cv=5,
         scoring="f1_weighted",
         n_jobs=-1,
     )

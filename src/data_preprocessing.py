@@ -2,8 +2,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
-
-
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -53,7 +51,6 @@ def build_preprocessor():
     # Numerical and categorical columns
     numerical_columns = ["income", "age", "var1"]
     categorical_columns = [
-        "subscriber",
         "gender",
         "house_type",
         "income_bucket",
@@ -64,7 +61,7 @@ def build_preprocessor():
     numerical_transformer = Pipeline(
         steps=[
             ("imputer", SimpleImputer(strategy="median")),
-            ("scaler", StandardScaler()),
+            ("scaler", StandardScaler()),  # not actually needed for a tree model
         ]
     )
 
