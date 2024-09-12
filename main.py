@@ -6,6 +6,7 @@ from src.model_inference import load_pipeline, predict_new_data
 
 
 def main():
+
     parser = argparse.ArgumentParser(description="ML Pipeline Project")
     parser.add_argument(
         "mode", choices=["train", "predict"], help="Choose train or predict mode"

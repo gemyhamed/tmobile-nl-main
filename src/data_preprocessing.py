@@ -23,11 +23,11 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
     def _extract_date_features(self, df):
         if "lastVisit" in df.columns:
             df["lastVisit"] = pd.to_datetime(df["lastVisit"], errors="coerce")
-            df["visit_year"] = df["lastVisit"].dt.year
-            df["visit_month"] = df["lastVisit"].dt.month
-            df["visit_day"] = df["lastVisit"].dt.day
-            df["visit_dayofweek"] = df["lastVisit"].dt.dayofweek
-            df["visit_quarter"] = df["lastVisit"].dt.quarter
+            df["visitTime_Year"] = df["lastVisit"].dt.year
+            df["visitTime_Month"] = df["lastVisit"].dt.month
+            # df["visit_Day"] = df["lastVisit"].dt.day
+            # df["visit_Dayofweek"] = df["lastVisit"].dt.dayofweek
+            # df["visit_Quarter"] = df["lastVisit"].dt.quarter
             df = df.drop(columns=["lastVisit"])
         return df
 
@@ -50,13 +50,17 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
 
 def build_preprocessor():
     # Numerical and categorical columns
-    numerical_columns = ["income", "age", "var1"]
-    categorical_columns = [
-        "gender",
-        "house_type",
-        "income_bucket",
-        "age_bucket",
+    numerical_columns = [
+        "income",
+        "age",
+        "var1",
+        "visitTime_Year",
+        "visitTime_Month",
+        # "visit_Day",
+        # "visit_Dayofweek",
+        # "visit_Quarter",
     ]
+    categorical_columns = ["gender", "house_type", "income_bucket", "age_bucket"]
 
     # Preprocessing for numerical columns
     numerical_transformer = Pipeline(

@@ -6,7 +6,6 @@ import pandas as pd
 def plot_original_feature_importance(pipeline):
     # Get the feature names from the preprocessor
     feature_names = pipeline.named_steps["preprocessor"].get_feature_names_out()
-
     # Get Importance values
     importance_values = pipeline["classifier"].feature_importances_
 

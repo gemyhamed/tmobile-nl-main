@@ -46,9 +46,9 @@ def train_model(data):
 
     # Reduce the hyperparameter grid for faster search
     param_grid = {
-        "classifier__n_estimators": [50, 100],  # Fewer trees for faster search
-        "classifier__max_depth": [10, 15],  # Reduce depth to make trees smaller
-        "classifier__min_samples_split": [2, 5],  # Keep it small for fast searches
+        "classifier__n_estimators": [40, 50],
+        "classifier__max_depth": [15, 20],
+        "classifier__min_samples_split": [1, 2, 3],
     }
 
     print("Starting hyperparameter tuning with GridSearchCV...")
