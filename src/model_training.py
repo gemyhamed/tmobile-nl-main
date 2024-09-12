@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
 from src.data_preprocessing import build_preprocessor, FeatureEngineering
+from src.utils import plot_original_feature_importance
 import os
 
 
@@ -69,13 +70,9 @@ def train_model(data):
 
     print(f"Best hyperparameters found: {best_params}")
 
-    # Evaluate on test set
-    accuracy = best_pipeline.score(X_test, y_test)
-    print(f"Model accuracy on test set: {accuracy:.4f}")
-
     # Generate classification report
     y_pred = best_pipeline.predict(X_test)
-    print("Classification Report (Test Set):")
+    print("Training Classification Report (Test Set):")
     print(classification_report(y_test, y_pred))
 
     # Save the entire pipeline (feature engineering, preprocessing, and model) as .pkl
@@ -85,6 +82,8 @@ def train_model(data):
 
     print("Saving the trained pipeline to 'models/train_pipeline.pkl'...")
     joblib.dump(best_pipeline, os.path.join(model_dir, "train_pipeline.pkl"))
-    print("Training pipeline saved successfully.")
+
+    print("Plotting Feature Importance..")
+    plot_original_feature_importance(best_pipeline)
 
     return best_pipeline
