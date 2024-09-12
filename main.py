@@ -36,12 +36,11 @@ def main():
         # Load the trained pipeline
         pipeline = load_pipeline()
 
-        # Make predictions (no target/label column provided)
-        data, predictions = predict_new_data(data, pipeline)
+        # Make predictions
+        data = predict_new_data(data, pipeline)
 
-        print("Predictions:", predictions)
-
-        prediction_file_path = "./data/Output/predictions.csv"
+        # Save to disk
+        prediction_file_path = "./data/output/predictions.csv"
         data.to_csv(prediction_file_path)
         print(f"Predictions Saved to file {prediction_file_path}!")
 

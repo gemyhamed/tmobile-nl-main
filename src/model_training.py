@@ -23,7 +23,7 @@ def train_model(data):
 
     print("Splitting the data into training and test sets...")
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X, y, test_size=0.15, random_state=60
     )
 
     print(
@@ -38,7 +38,7 @@ def train_model(data):
             ("preprocessor", preprocessor),  # Preprocessing step
             (
                 "classifier",
-                RandomForestClassifier(random_state=42, class_weight="balanced"),
+                RandomForestClassifier(random_state=60, class_weight="balanced"),
             ),  # Classifier
         ]
     )
