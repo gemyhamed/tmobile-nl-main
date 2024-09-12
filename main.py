@@ -41,7 +41,7 @@ def main():
 
         print("Predictions:", predictions)
 
-        prediction_file_path = "predictions.csv"
+        prediction_file_path = "./data/Output/predictions.csv"
         data.to_csv(prediction_file_path)
         print(f"Predictions Saved to file {prediction_file_path}!")
 

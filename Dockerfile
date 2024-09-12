@@ -4,11 +4,17 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-# Install requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app
 COPY . .
 
-# Default command (train as the default mode)
-CMD ["python", "main.py", "train", "--data", "./data/training_data.csv"]
+# Define environment variables
+# don't write .pyc files
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Set ENTRYPOINT to always call the Python script
+ENTRYPOINT ["python", "main.py"]
+
+# CMD sets the default arguments to train the model
+CMD ["train", "--data", "data-set.csv"]

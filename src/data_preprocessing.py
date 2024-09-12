@@ -27,6 +27,7 @@ class FeatureEngineering(BaseEstimator, TransformerMixin):
             df["visit_month"] = df["lastVisit"].dt.month
             df["visit_day"] = df["lastVisit"].dt.day
             df["visit_dayofweek"] = df["lastVisit"].dt.dayofweek
+            df["visit_quarter"] = df["lastVisit"].dt.quarter
             df = df.drop(columns=["lastVisit"])
         return df
 
