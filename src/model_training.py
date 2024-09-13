@@ -40,7 +40,7 @@ def train_model(data):
             (
                 "classifier",
                 RandomForestClassifier(random_state=60, class_weight="balanced"),
-            ),  # Classifier
+            ),
         ]
     )
 
@@ -56,7 +56,7 @@ def train_model(data):
     grid_search = GridSearchCV(
         estimator=full_pipeline,
         param_grid=param_grid,
-        cv=3,
+        cv=5,
         scoring="f1_weighted",
         n_jobs=-1,
     )
